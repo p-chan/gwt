@@ -1,0 +1,24 @@
+{
+  "name": "gwt",
+  "version": "0.1.0",
+  "description": "Git worktree wrapper with enhanced workflow",
+  "type": "module",
+  "bin": {
+    "gwt": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "bun build src/cli.ts --outdir dist --target bun --minify",
+    "dev": "bun run src/cli.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "gunshi": "0.27.5"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.5",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "bun": "1.3.5"
+  }
+}
