@@ -1,5 +1,5 @@
 {
-  "name": "gwt",
+  "name": "@p-chan/gwt",
   "version": "0.1.0",
   "description": "Git worktree wrapper with enhanced workflow",
   "type": "module",
