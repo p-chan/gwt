@@ -11,15 +11,54 @@ export async function resolveWorktreePath(
   branchName: string
 ): Promise<string> {
   const gitRoot = await getGitRoot();
-  const repoName = path.basename(gitRoot);
+  // Sanitize branch name for directory: feature/foo -> feature-foo
+  // Note: Currently only replaces forward slashes. macOS/Linux compatible.
+  // For Windows support, consider sanitizing: < > : " \ | ? *
+  const branch = branchName.replace(/\//g, '-');
+
+  // Get path hierarchy for ghq-like structure
+  const currentDir = path.basename(gitRoot);
+  const parentPath = path.dirname(gitRoot);
+  const parentDir = path.basename(parentPath);
+  const grandParentPath = path.dirname(parentPath);
+  const grandParentDir = path.basename(grandParentPath);
+
+  // Validate template variables against repository path depth
+  if (basePath.includes('${PARENT_DIR}') && parentPath === gitRoot) {
+    throw new Error(
+      'Template uses ${PARENT_DIR} but repository is at the filesystem root. ' +
+        `Repository path: ${gitRoot}`
+    );
+  }
+  if (basePath.includes('${GRAND_PARENT_DIR}') && grandParentPath === parentPath) {
+    throw new Error(
+      'Template uses ${GRAND_PARENT_DIR} but repository is too close to filesystem root. ' +
+        `Repository path: ${gitRoot}`
+    );
+  }
 
   let resolved = basePath
-    .replace('${GIT_ROOT}', gitRoot)
-    .replace('${REPO_NAME}', repoName)
-    .replace('${HOME}', process.env.HOME || '~');
+    .replace(/\$\{CURRENT_DIR\}/g, currentDir)
+    .replace(/\$\{PARENT_DIR\}/g, parentDir)
+    .replace(/\$\{GRAND_PARENT_DIR\}/g, grandParentDir)
+    .replace(/\$\{BRANCH\}/g, branch);
 
-  // Sanitize branch name for directory: feature/foo -> feature-foo
-  const sanitizedBranch = branchName.replace(/\//g, '-');
+  if (resolved.startsWith('~')) {
+    const home = process.env.HOME;
+    if (!home) {
+      throw new Error('HOME environment variable is not set');
+    }
+    resolved = resolved.replace(/^~/, home);
+  }
 
-  return path.join(resolved, sanitizedBranch);
+  if (!path.isAbsolute(resolved)) {
+    resolved = path.join(gitRoot, resolved);
+  }
+
+  // Auto-append branch name only if ${BRANCH} is not used in template
+  if (!basePath.includes('${BRANCH}')) {
+    resolved = path.join(resolved, branch);
+  }
+
+  return resolved;
 }
