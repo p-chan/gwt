@@ -128,7 +128,7 @@ git config gwt.worktree-path '~/gwt/${GRAND_PARENT_DIR}/${PARENT_DIR}/${CURRENT_
 git config gwt.worktree-path '../worktrees/${CURRENT_DIR}'
 ```
 
-**注意**: `${PARENT_DIR}` と `${GRAND_PARENT_DIR}` 変数は、リポジトリがファイルシステムのルート近くにある場合は空になることがあります。ghq ライクな構造を使用する場合は、リポジトリパスに十分な深さがあることを確認してください（例: `/path/to/github.com/org/repo`）。
+**注意**: `${PARENT_DIR}` と `${GRAND_PARENT_DIR}` 変数は、常に何らかのディレクトリ名になります（空文字列にはなりません）。ただし、ghq ライクな構造を使用する場合は、期待する構造を得るためにリポジトリパスに十分な深さがあることを確認してください（例: `/path/to/github.com/org/repo`）。
 
 ### フックを設定
 

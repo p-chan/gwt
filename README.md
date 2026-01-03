@@ -128,7 +128,7 @@ git config gwt.worktree-path '~/gwt/${GRAND_PARENT_DIR}/${PARENT_DIR}/${CURRENT_
 git config gwt.worktree-path '../worktrees/${CURRENT_DIR}'
 ```
 
-**Note**: The `${PARENT_DIR}` and `${GRAND_PARENT_DIR}` variables may be empty if your repository is close to the filesystem root. For ghq-like structures, ensure your repository path has sufficient depth (e.g., `/path/to/github.com/org/repo`).
+**Note**: The `${PARENT_DIR}` and `${GRAND_PARENT_DIR}` variables are derived from the repository path and are always set, but configurations that rely on them (such as ghq-like structures) require that your repository path has sufficient depth (for example, `/path/to/github.com/org/repo`).
 
 ### Configure hooks
 
