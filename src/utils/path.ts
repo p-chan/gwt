@@ -11,6 +11,9 @@ export async function resolveWorktreePath(
   branchName: string
 ): Promise<string> {
   const gitRoot = await getGitRoot();
+  // Sanitize branch name for directory: feature/foo -> feature-foo
+  // Note: Currently only replaces forward slashes. macOS/Linux compatible.
+  // For Windows support, consider sanitizing: < > : " \ | ? *
   const branch = branchName.replace(/\//g, '-');
 
   // Get path hierarchy for ghq-like structure
