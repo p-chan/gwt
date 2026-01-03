@@ -91,9 +91,9 @@ gwt remove -f feature-branch
 
 ### Change worktree location
 
-By default, worktrees are placed in `~/gwt/${GRAND_PARENT_DIR}/${PARENT_DIR}/${CURRENT_DIR}/${BRANCH}` (ghq-like structure).
+By default, worktrees are placed in `~/gwt/${CURRENT_DIR}/${BRANCH}`.
 
-For example, if your Git repository is located at `/path/to/github.com/org/repo`, worktrees will be created at `~/gwt/github.com/org/repo/feature-foo` by default.
+For example, if your Git repository is `repo`, worktrees will be created at `~/gwt/repo/feature-foo` by default.
 
 Available variables:
 - `${CURRENT_DIR}` - Git repository directory name
@@ -109,10 +109,10 @@ Path specification methods:
 Configuration examples:
 
 ```bash
-# ghq-like structure (default)
-git config gwt.worktree-path '~/gwt/${GRAND_PARENT_DIR}/${PARENT_DIR}/${CURRENT_DIR}/${BRANCH}'
+# Simple structure (default)
+git config gwt.worktree-path '~/gwt/${CURRENT_DIR}/${BRANCH}'
 
-# Separate per repository (simple)
+# Place in repository directory
 git config gwt.worktree-path '.worktrees'
 
 # Organize by repository name under home directory
@@ -121,9 +121,14 @@ git config gwt.worktree-path '~/worktrees/${CURRENT_DIR}'
 # Group by parent directory (organization-based)
 git config gwt.worktree-path '~/gwt/${PARENT_DIR}/${CURRENT_DIR}/${BRANCH}'
 
+# ghq-like structure (advanced - requires deep directory hierarchy)
+git config gwt.worktree-path '~/gwt/${GRAND_PARENT_DIR}/${PARENT_DIR}/${CURRENT_DIR}/${BRANCH}'
+
 # Place one level above repository
 git config gwt.worktree-path '../worktrees/${CURRENT_DIR}'
 ```
+
+**Note**: The `${PARENT_DIR}` and `${GRAND_PARENT_DIR}` variables may be empty if your repository is close to the filesystem root. For ghq-like structures, ensure your repository path has sufficient depth (e.g., `/path/to/github.com/org/repo`).
 
 ### Configure hooks
 
