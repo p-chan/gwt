@@ -24,13 +24,13 @@ export async function resolveWorktreePath(
   const grandParentDir = path.basename(grandParentPath);
 
   // Validate template variables against repository path depth
-  if (basePath.includes('${PARENT_DIR}') && parentDir === '') {
+  if (basePath.includes('${PARENT_DIR}') && parentPath === gitRoot) {
     throw new Error(
-      'Template uses ${PARENT_DIR} but repository is too close to filesystem root. ' +
+      'Template uses ${PARENT_DIR} but repository is at the filesystem root. ' +
         `Repository path: ${gitRoot}`
     );
   }
-  if (basePath.includes('${GRAND_PARENT_DIR}') && grandParentDir === '') {
+  if (basePath.includes('${GRAND_PARENT_DIR}') && grandParentPath === parentPath) {
     throw new Error(
       'Template uses ${GRAND_PARENT_DIR} but repository is too close to filesystem root. ' +
         `Repository path: ${gitRoot}`
