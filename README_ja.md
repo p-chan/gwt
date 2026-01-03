@@ -91,10 +91,38 @@ gwt remove -f feature-branch
 
 ### worktree配置場所を変更
 
-デフォルトでは `${GIT_ROOT}/.worktrees` に配置されます。
+デフォルトでは `~/gwt/${GRAND_PARENT_DIR}/${PARENT_DIR}/${CURRENT_DIR}/${BRANCH}` に配置されます（ghq ライクな構造）。
+
+例えば、Git リポジトリが `/path/to/github.com/org/repo` にある場合、デフォルトでは `~/gwt/github.com/org/repo/feature-foo` に配置されます。
+
+使用可能な変数:
+- `${CURRENT_DIR}` - Git リポジトリのディレクトリ名
+- `${PARENT_DIR}` - Git リポジトリの親ディレクトリ名
+- `${GRAND_PARENT_DIR}` - Git リポジトリの祖父母ディレクトリ名
+- `${BRANCH}` - ブランチ名（スラッシュはハイフンに変換）
+
+パスの記述方法:
+- 相対パス: Git リポジトリのルートからの相対パス（例: `.worktrees`, `../worktrees`）
+- `~` で始まるパス: ホームディレクトリからのパス（例: `~/gwt/${CURRENT_DIR}`）
+- 絶対パス: そのまま使用（例: `/tmp/worktrees/${CURRENT_DIR}`）
+
+設定例:
 
 ```bash
-git config gwt.worktreePath '~/.local/share/gwt/${REPO_NAME}'
+# ghq ライクな構造（デフォルト）
+git config gwt.worktree-path '~/gwt/${GRAND_PARENT_DIR}/${PARENT_DIR}/${CURRENT_DIR}/${BRANCH}'
+
+# リポジトリごとに分離（シンプル）
+git config gwt.worktree-path '.worktrees'
+
+# ホームディレクトリ配下にリポジトリ別で整理
+git config gwt.worktree-path '~/worktrees/${CURRENT_DIR}'
+
+# 親ディレクトリ配下にまとめる（organization 別）
+git config gwt.worktree-path '~/gwt/${PARENT_DIR}/${CURRENT_DIR}/${BRANCH}'
+
+# リポジトリの1つ上の階層に配置
+git config gwt.worktree-path '../worktrees/${CURRENT_DIR}'
 ```
 
 ### フックを設定
