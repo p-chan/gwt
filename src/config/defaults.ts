@@ -5,5 +5,5 @@ export const CONFIG_KEYS = {
 } as const;
 
 export const DEFAULT_CONFIG = {
-  worktreePath: '~/gwt/${GRAND_PARENT_DIR}/${PARENT_DIR}/${CURRENT_DIR}/${BRANCH}',
+  worktreePath: '~/gwt/${CURRENT_DIR}/${BRANCH}',
 } as const;
